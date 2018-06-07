@@ -1,0 +1,569 @@
+---
+title: "Is There A Relationship Amongst The Nutrients Of Online Recipes?"
+author: "Omkar Sunkersett"
+date: "4/9/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Loading the required libraries
+```{r step1, message=FALSE, warning=FALSE}
+library(ggplot2)
+```
+
+## Reading the data from the TSV file
+```{r step2}
+dt <- read.table("/Users/omkarsunkersett/Desktop/SI618/project/dataset-combined.tsv", header = TRUE, sep = "\t", quote = "")
+
+epicurious <- subset(dt,dt$Source=='Epicurious')
+head(epicurious, 5)
+
+spoonacular <- subset(dt,dt$Source=='Spoonacular')
+head(spoonacular, 5)
+```
+
+## Subsetting the data based on calorie classification
+```{r step3}
+epi_g1 <- subset(epicurious, epicurious$Calories >=0 & epicurious$Calories <=250)
+epi_g2 <- subset(epicurious, epicurious$Calories >250 & epicurious$Calories <=500)
+epi_g3 <- subset(epicurious, epicurious$Calories >500 & epicurious$Calories <=750)
+epi_g4 <- subset(epicurious, epicurious$Calories >750 & epicurious$Calories <=2000)
+
+spoon_g1 <- subset(spoonacular, spoonacular$Calories >=0 & spoonacular$Calories <=250)
+spoon_g2 <- subset(spoonacular, spoonacular$Calories >250 & spoonacular$Calories <=500)
+spoon_g3 <- subset(spoonacular, spoonacular$Calories >500 & spoonacular$Calories <=750)
+spoon_g4 <- subset(spoonacular, spoonacular$Calories >750 & spoonacular$Calories <=2000)
+```
+
+## Studying the relationship between Saturated Fat and Cholesterol for Epicurious data
+## Calorie Subgroup: 0 - 250 cal
+```{r step4a, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g1_lm1 <- lm(Saturated.Fat..g. ~ Cholesterol..mg., data = epi_g1)
+summary(epi_g1_lm1)
+ggplot(data = epi_g1, mapping = aes(x=Cholesterol..mg., y=Saturated.Fat..g., col=factor(Saturated.Fat..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=15,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Cholesterol (Calories: 0 - 250)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Cholesterol (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Calorie Subgroup: 250 - 500 cal
+```{r step4b, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g2_lm1 <- lm(Saturated.Fat..g. ~ Cholesterol..mg., data = epi_g2)
+summary(epi_g2_lm1)
+ggplot(data = epi_g2, mapping = aes(x=Cholesterol..mg., y=Saturated.Fat..g., col=factor(Saturated.Fat..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=16,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Cholesterol (Calories: 250 - 500)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Cholesterol (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Calorie Subgroup: 500 - 750 cal
+```{r step4c, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g3_lm1 <- lm(Saturated.Fat..g. ~ Cholesterol..mg., data = epi_g3)
+summary(epi_g3_lm1)
+ggplot(data = epi_g3, mapping = aes(x=Cholesterol..mg., y=Saturated.Fat..g., col=factor(Saturated.Fat..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=17,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Cholesterol (Calories: 500 - 750)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Cholesterol (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Calorie Subgroup: 750 - 2000 cal
+```{r step4d, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g4_lm1 <- lm(Saturated.Fat..g. ~ Cholesterol..mg., data = epi_g4)
+summary(epi_g4_lm1)
+ggplot(data = epi_g4, mapping = aes(x=Cholesterol..mg., y=Saturated.Fat..g., col=factor(Saturated.Fat..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=18,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Cholesterol (Calories: 750 - 2000)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Cholesterol (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Studying the relationship between Saturated Fat and Sodium for Epicurious data
+## Calorie Subgroup: 0 - 250 cal
+```{r step5a, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g1_lm2 <- lm(Saturated.Fat..g. ~ Sodium..mg., data = epi_g1)
+summary(epi_g1_lm2)
+ggplot(data = epi_g1, mapping = aes(x=Sodium..mg., y=Saturated.Fat..g., col=factor(Saturated.Fat..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=15,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Sodium (Calories: 0 - 250)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Sodium (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Calorie Subgroup: 250 - 500 cal
+```{r step5b, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g2_lm2 <- lm(Saturated.Fat..g. ~ Sodium..mg., data = epi_g2)
+summary(epi_g2_lm2)
+ggplot(data = epi_g2, mapping = aes(x=Sodium..mg., y=Saturated.Fat..g., col=factor(Saturated.Fat..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=16,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Sodium (Calories: 250 - 500)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Sodium (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Calorie Subgroup: 500 - 750 cal
+```{r step5c, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g3_lm2 <- lm(Saturated.Fat..g. ~ Sodium..mg., data = epi_g3)
+summary(epi_g3_lm2)
+ggplot(data = epi_g3, mapping = aes(x=Sodium..mg., y=Saturated.Fat..g., col=factor(Saturated.Fat..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=17,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Sodium (Calories: 500 - 750)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Sodium (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Calorie Subgroup: 750 - 2000 cal
+```{r step5d, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g4_lm2 <- lm(Saturated.Fat..g. ~ Sodium..mg., data = epi_g4)
+summary(epi_g4_lm2)
+ggplot(data = epi_g4, mapping = aes(x=Sodium..mg., y=Saturated.Fat..g., col=factor(Saturated.Fat..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=18,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Sodium (Calories: 750 - 2000)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Sodium (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Studying the relationship between Total Fat and Carbohydrates for Epicurious data
+## Calorie Subgroup: 0 - 250 cal
+```{r step6a, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g1_lm3 <- lm(Fat..g. ~ Carbohydrates..g., data = epi_g1)
+summary(epi_g1_lm3)
+ggplot(data = epi_g1, mapping = aes(x=Carbohydrates..g., y=Fat..g., col=factor(Fat..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=15,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Total Fat and Carbohydrates (Calories: 0 - 250)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Carbohydrates (g)") + 
+  ylab("Total Fat (g)")
+```
+
+## Calorie Subgroup: 250 - 500 cal
+```{r step6b, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g2_lm3 <- lm(Fat..g. ~ Carbohydrates..g., data = epi_g2)
+summary(epi_g2_lm3)
+ggplot(data = epi_g2, mapping = aes(x=Carbohydrates..g., y=Fat..g., col=factor(Fat..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=16,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Total Fat and Carbohydrates (Calories: 250 - 500)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Carbohydrates (g)") + 
+  ylab("Total Fat (g)")
+```
+
+## Calorie Subgroup: 500 - 750 cal
+```{r step6c, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g3_lm3 <- lm(Fat..g. ~ Carbohydrates..g., data = epi_g3)
+summary(epi_g3_lm3)
+ggplot(data = epi_g3, mapping = aes(x=Carbohydrates..g., y=Fat..g., col=factor(Fat..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=17,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Total Fat and Carbohydrates (Calories: 500 - 750)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Carbohydrates (g)") + 
+  ylab("Total Fat (g)")
+```
+
+## Calorie Subgroup: 750 - 2000 cal
+```{r step6d, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g4_lm3 <- lm(Fat..g. ~ Carbohydrates..g., data = epi_g4)
+summary(epi_g4_lm3)
+ggplot(data = epi_g4, mapping = aes(x=Carbohydrates..g., y=Fat..g., col=factor(Fat..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=18,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Total Fat and Carbohydrates (Calories: 750 - 2000)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Carbohydrates (g)") + 
+  ylab("Total Fat (g)")
+```
+
+## Studying the relationship between Protein and Fiber for Epicurious data
+## Calorie Subgroup: 0 - 250 cal
+```{r step7a, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g1_lm4 <- lm(Protein..g. ~ Fiber..g., data = epi_g1)
+summary(epi_g1_lm4)
+ggplot(data = epi_g1, mapping = aes(x=Fiber..g., y=Protein..g., col=factor(Protein..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=15,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Protein and Fiber (Calories: 0 - 250)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Fiber (g)") + 
+  ylab("Protein (g)")
+```
+
+## Calorie Subgroup: 250 - 500 cal
+```{r step7b, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g2_lm4 <- lm(Protein..g. ~ Fiber..g., data = epi_g2)
+summary(epi_g2_lm4)
+ggplot(data = epi_g2, mapping = aes(x=Fiber..g., y=Protein..g., col=factor(Protein..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=16,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Protein and Fiber (Calories: 250 - 500)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Fiber (g)") + 
+  ylab("Protein (g)")
+```
+
+## Calorie Subgroup: 500 - 750 cal
+```{r step7c, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g3_lm4 <- lm(Protein..g. ~ Fiber..g., data = epi_g3)
+summary(epi_g3_lm4)
+ggplot(data = epi_g3, mapping = aes(x=Fiber..g., y=Protein..g., col=factor(Protein..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=17,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Protein and Fiber (Calories: 500 - 750)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Fiber (g)") + 
+  ylab("Protein (g)")
+```
+
+## Calorie Subgroup: 750 - 2000 cal
+```{r step7d, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g4_lm4 <- lm(Protein..g. ~ Fiber..g., data = epi_g4)
+summary(epi_g4_lm4)
+ggplot(data = epi_g4, mapping = aes(x=Fiber..g., y=Protein..g., col=factor(Protein..g.))) + 
+  geom_jitter(col="darkorange",size=4,shape=18,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Protein and Fiber (Calories: 750 - 2000)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Fiber (g)") + 
+  ylab("Protein (g)")
+```
+
+## Studying the relationship between Calories and Significant Nutrients for Epicurious data
+## Calorie Subgroup: 0 - 250 cal
+```{r step8a, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g1_lm5 <- lm(Calories..cal. ~ (Fat..g.+Saturated.Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.+Sodium..mg.+Cholesterol..mg.), data = epi_g1)
+summary(epi_g1_lm5)
+ggplot(data = epi_g1, mapping = aes(x=(Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.), y=Calories..cal., col=Calories..cal.)) + 
+  geom_jitter(size=4,shape=15,alpha=0.6) + 
+  geom_quantile(color = "red",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Calories and Significant Nutrients (Calories: 0 - 250)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Total Fat, Protein, Carbohydrates & Fiber (g)") + 
+  ylab("Calories (cal)")
+```
+
+## Calorie Subgroup: 250 - 500 cal
+```{r step8b, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g2_lm5 <- lm(Calories..cal. ~ (Fat..g.+Saturated.Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.+Sodium..mg.+Cholesterol..mg.), data = epi_g2)
+summary(epi_g2_lm5)
+ggplot(data = epi_g2, mapping = aes(x=(Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.), y=Calories..cal., col=Calories..cal.)) + 
+  geom_jitter(size=4,shape=16,alpha=0.6) + 
+  geom_quantile(color = "red",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Calories and Significant Nutrients (Calories: 250 - 500)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Total Fat, Protein, Carbohydrates & Fiber (g)") + 
+  ylab("Calories (cal)")
+```
+
+## Calorie Subgroup: 500 - 750 cal
+```{r step8c, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g3_lm5 <- lm(Calories..cal. ~ (Fat..g.+Saturated.Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.+Sodium..mg.+Cholesterol..mg.), data = epi_g3)
+summary(epi_g3_lm5)
+ggplot(data = epi_g3, mapping = aes(x=(Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.), y=Calories..cal., col=Calories..cal.)) + 
+  geom_jitter(size=4,shape=17,alpha=0.6) + 
+  geom_quantile(color = "red",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Calories and Significant Nutrients (Calories: 500 - 750)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Total Fat, Protein, Carbohydrates & Fiber (g)") + 
+  ylab("Calories (cal)")
+```
+
+## Calorie Subgroup: 750 - 2000 cal
+```{r step8d, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+epi_g4_lm5 <- lm(Calories..cal. ~ (Fat..g.+Saturated.Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.+Sodium..mg.+Cholesterol..mg.), data = epi_g4)
+summary(epi_g4_lm5)
+ggplot(data = epi_g4, mapping = aes(x=(Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.), y=Calories..cal., col=Calories..cal.)) + 
+  geom_jitter(size=4,shape=18,alpha=0.6) + 
+  geom_quantile(color = "red",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Calories and Significant Nutrients (Calories: 750 - 2000)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Total Fat, Protein, Carbohydrates & Fiber (g)") + 
+  ylab("Calories (cal)")
+```
+
+## Studying the relationship between Saturated Fat and Cholesterol for Spoonacular data
+## Calorie Subgroup: 0 - 250 cal
+```{r step9a, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g1_lm1 <- lm(Saturated.Fat..g. ~ Cholesterol..mg., data = spoon_g1)
+summary(spoon_g1_lm1)
+ggplot(data = spoon_g1, mapping = aes(x=Cholesterol..mg., y=Saturated.Fat..g., col=Saturated.Fat..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=15,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Cholesterol (Calories: 0 - 250)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Cholesterol (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Calorie Subgroup: 250 - 500 cal
+```{r step9b, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g2_lm1 <- lm(Saturated.Fat..g. ~ Cholesterol..mg., data = spoon_g2)
+summary(spoon_g2_lm1)
+ggplot(data = spoon_g2, mapping = aes(x=Cholesterol..mg., y=Saturated.Fat..g., col=Saturated.Fat..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=16,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Cholesterol (Calories: 250 - 500)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Cholesterol (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Calorie Subgroup: 500 - 750 cal
+```{r step9c, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g3_lm1 <- lm(Saturated.Fat..g. ~ Cholesterol..mg., data = spoon_g3)
+summary(spoon_g3_lm1)
+ggplot(data = spoon_g3, mapping = aes(x=Cholesterol..mg., y=Saturated.Fat..g., col=Saturated.Fat..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=17,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Cholesterol (Calories: 500 - 750)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Cholesterol (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Calorie Subgroup: 750 - 2000 cal
+```{r step9d, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g4_lm1 <- lm(Saturated.Fat..g. ~ Cholesterol..mg., data = spoon_g4)
+summary(spoon_g4_lm1)
+ggplot(data = spoon_g4, mapping = aes(x=Cholesterol..mg., y=Saturated.Fat..g., col=Saturated.Fat..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=18,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Cholesterol (Calories: 750 - 2000)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Cholesterol (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Studying the relationship between Saturated Fat and Sodium for Spoonacular data
+## Calorie Subgroup: 0 - 250 cal
+```{r step10a, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g1_lm2 <- lm(Saturated.Fat..g. ~ Sodium..mg., data = spoon_g1)
+summary(spoon_g1_lm2)
+ggplot(data = spoon_g1, mapping = aes(x=Sodium..mg., y=Saturated.Fat..g., col=Saturated.Fat..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=15,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Sodium (Calories: 0 - 250)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Sodium (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Calorie Subgroup: 250 - 500 cal
+```{r step10b, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g2_lm2 <- lm(Saturated.Fat..g. ~ Sodium..mg., data = spoon_g2)
+summary(spoon_g2_lm2)
+ggplot(data = spoon_g2, mapping = aes(x=Sodium..mg., y=Saturated.Fat..g., col=Saturated.Fat..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=16,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Sodium (Calories: 250 - 500)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Sodium (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Calorie Subgroup: 500 - 750 cal
+```{r step10c, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g3_lm2 <- lm(Saturated.Fat..g. ~ Sodium..mg., data = spoon_g3)
+summary(spoon_g3_lm2)
+ggplot(data = spoon_g3, mapping = aes(x=Sodium..mg., y=Saturated.Fat..g., col=Saturated.Fat..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=17,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Sodium (Calories: 500 - 750)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Sodium (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Calorie Subgroup: 750 - 2000 cal
+```{r step10d, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g4_lm2 <- lm(Saturated.Fat..g. ~ Sodium..mg., data = spoon_g4)
+summary(spoon_g4_lm2)
+ggplot(data = spoon_g4, mapping = aes(x=Sodium..mg., y=Saturated.Fat..g., col=Saturated.Fat..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=18,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Saturated Fat and Sodium (Calories: 750 - 2000)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Sodium (mg)") +
+  ylab("Saturated Fat (g)")
+```
+
+## Studying the relationship between Total Fat and Carbohydrates for Spoonacular data
+## Calorie Subgroup: 0 - 250 cal
+```{r step11a, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g1_lm3 <- lm(Fat..g. ~ Carbohydrates..g., data = spoon_g1)
+summary(spoon_g1_lm3)
+ggplot(data = spoon_g1, mapping = aes(x=Carbohydrates..g., y=Fat..g., col=Fat..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=15,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Total Fat and Carbohydrates (Calories: 0 - 250)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Carbohydrates (g)") + 
+  ylab("Total Fat (g)")
+```
+
+## Calorie Subgroup: 250 - 500 cal
+```{r step11b, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g2_lm3 <- lm(Fat..g. ~ Carbohydrates..g., data = spoon_g2)
+summary(spoon_g2_lm3)
+ggplot(data = spoon_g2, mapping = aes(x=Carbohydrates..g., y=Fat..g., col=Fat..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=16,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Total Fat and Carbohydrates (Calories: 250 - 500)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Carbohydrates (g)") + 
+  ylab("Total Fat (g)")
+```
+
+## Calorie Subgroup: 500 - 750 cal
+```{r step11c, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g3_lm3 <- lm(Fat..g. ~ Carbohydrates..g., data = spoon_g3)
+summary(spoon_g3_lm3)
+ggplot(data = spoon_g3, mapping = aes(x=Carbohydrates..g., y=Fat..g., col=Fat..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=17,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Total Fat and Carbohydrates (Calories: 500 - 750)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Carbohydrates (g)") + 
+  ylab("Total Fat (g)")
+```
+
+## Calorie Subgroup: 750 - 2000 cal
+```{r step11d, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g4_lm3 <- lm(Fat..g. ~ Carbohydrates..g., data = spoon_g4)
+summary(spoon_g4_lm3)
+ggplot(data = spoon_g4, mapping = aes(x=Carbohydrates..g., y=Fat..g., col=Fat..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=18,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Total Fat and Carbohydrates (Calories: 750 - 2000)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Carbohydrates (g)") + 
+  ylab("Total Fat (g)")
+```
+
+## Studying the relationship between Protein and Fiber for Spoonacular data
+## Calorie Subgroup: 0 - 250 cal
+```{r step12a, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g1_lm4 <- lm(Protein..g. ~ Fiber..g., data = spoon_g1)
+summary(spoon_g1_lm4)
+ggplot(data = spoon_g1, mapping = aes(x=Fiber..g., y=Protein..g., col=Protein..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=15,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Protein and Fiber (Calories: 0 - 250)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Fiber (g)") + 
+  ylab("Protein (g)")
+```
+
+## Calorie Subgroup: 250 - 500 cal
+```{r step12b, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g2_lm4 <- lm(Protein..g. ~ Fiber..g., data = spoon_g2)
+summary(spoon_g2_lm4)
+ggplot(data = spoon_g2, mapping = aes(x=Fiber..g., y=Protein..g., col=factor(Protein..g.))) + 
+  geom_jitter(col="darkgreen",size=4,shape=16,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Protein and Fiber (Calories: 250 - 500)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Fiber (g)") + 
+  ylab("Protein (g)")
+```
+
+## Calorie Subgroup: 500 - 750 cal
+```{r step12c, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g3_lm4 <- lm(Protein..g. ~ Fiber..g., data = spoon_g3)
+summary(spoon_g3_lm4)
+ggplot(data = spoon_g3, mapping = aes(x=Fiber..g., y=Protein..g., col=Protein..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=17,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Protein and Fiber (Calories: 500 - 750)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Fiber (g)") + 
+  ylab("Protein (g)")
+```
+
+## Calorie Subgroup: 750 - 2000 cal
+```{r step12d, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g4_lm4 <- lm(Protein..g. ~ Fiber..g., data = spoon_g4)
+summary(spoon_g4_lm4)
+ggplot(data = spoon_g4, mapping = aes(x=Fiber..g., y=Protein..g., col=Protein..g.)) + 
+  geom_jitter(col="darkgreen",size=4,shape=18,alpha=0.6) + 
+  geom_quantile(color = "black",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Protein and Fiber (Calories: 750 - 2000)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Fiber (g)") + 
+  ylab("Protein (g)")
+```
+
+## Studying the relationship between Calories and Significant Nutrients for Spoonacular data
+## Calorie Subgroup: 0 - 250 cal
+```{r step13a, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g1_lm5 <- lm(Calories..cal. ~ (Fat..g.+Saturated.Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.+Sodium..mg.+Cholesterol..mg.), data = spoon_g1)
+summary(spoon_g1_lm5)
+ggplot(data = spoon_g1, mapping = aes(x=(Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.), y=Calories..cal., col=Calories..cal.)) + 
+  geom_jitter(size=4,shape=15,alpha=0.6) + 
+  geom_quantile(color = "red",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Calories and Significant Nutrients (Calories: 0 - 250)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Total Fat, Protein, Carbohydrates & Fiber (g)") + 
+  ylab("Calories (cal)")
+```
+
+## Calorie Subgroup: 250 - 500 cal
+```{r step13b, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g2_lm5 <- lm(Calories..cal. ~ (Fat..g.+Saturated.Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.+Sodium..mg.+Cholesterol..mg.), data = spoon_g2)
+summary(spoon_g2_lm5)
+ggplot(data = spoon_g2, mapping = aes(x=(Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.), y=Calories..cal., col=Calories..cal.)) + 
+  geom_jitter(size=4,shape=16,alpha=0.6) + 
+  geom_quantile(color = "red",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Calories and Significant Nutrients (Calories: 250 - 500)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Total Fat, Protein, Carbohydrates & Fiber (g)") + 
+  ylab("Calories (cal)")
+```
+
+## Calorie Subgroup: 500 - 750 cal
+```{r step13c, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g3_lm5 <- lm(Calories..cal. ~ (Fat..g.+Saturated.Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.+Sodium..mg.+Cholesterol..mg.), data = spoon_g3)
+summary(spoon_g3_lm5)
+ggplot(data = spoon_g3, mapping = aes(x=(Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.), y=Calories..cal., col=Calories..cal.)) + 
+  geom_jitter(size=4,shape=17,alpha=0.6) + 
+  geom_quantile(color = "red",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Calories and Significant Nutrients (Calories: 500 - 750)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Total Fat, Protein, Carbohydrates & Fiber (g)") + 
+  ylab("Calories (cal)")
+```
+
+## Calorie Subgroup: 750 - 2000 cal
+```{r step13d, echo=FALSE, message=FALSE, warning=FALSE, fig.height=6, fig.width=12}
+spoon_g4_lm5 <- lm(Calories..cal. ~ (Fat..g.+Saturated.Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.+Sodium..mg.+Cholesterol..mg.), data = spoon_g4)
+summary(spoon_g4_lm5)
+ggplot(data = spoon_g4, mapping = aes(x=(Fat..g.+Protein..g.+Carbohydrates..g.+Fiber..g.), y=Calories..cal., col=Calories..cal.)) + 
+  geom_jitter(size=4,shape=18,alpha=0.6) + 
+  geom_quantile(color = "red",size=1,linetype=4,alpha=0.8) + 
+  ggtitle("Relationship Between Calories and Significant Nutrients (Calories: 750 - 2000)") + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  xlab("Total Fat, Protein, Carbohydrates & Fiber (g)") + 
+  ylab("Calories (cal)")
+```
